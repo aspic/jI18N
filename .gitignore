@@ -1,0 +1,9 @@
+*hs_err*
+*.dex
+*.apk
+*.class
+*.ap_
+gc-desktop/bin/*
+gc-desktop/settings
+gc-android/bin/*
+*R.java
