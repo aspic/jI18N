@@ -1,12 +1,10 @@
 package no.mehl.settense;
 
 import java.io.File;
-import java.util.HashMap;
-import no.mehl.settense.exceptions.NoSuchLocaleException;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.Logger;
 
 /**
  * A class for managing {@link Strings} for language purposes in an application.
@@ -15,58 +13,41 @@ import com.badlogic.gdx.utils.Logger;
  */
 public class Tense {
 	
-	private final String path = "lng";
-	private String locale;
-	private HashMap<String, String> strings;
+	private String path;
+	private TenseMap strings;
 	
-	public Tense(String locale) {
-		strings = new HashMap<String, String>();
-		this.locale = locale;
+	public Tense(String languagePath) {
+		this.path = languagePath;
+	}
+	
+	public TenseMap loadStrings(String file) {
+		FileHandle handle = null;
+		String json = null;
+		TenseMap model = null;
+		// We assume libgdx
+		if(Gdx.files != null) {
+			handle = Gdx.files.internal(path + "/" + file);
+		} 
+		// Load from filesystem
+		else {
+			handle = new FileHandle(new File(path + "/" + file));
+		}
 		try {
-			loadStrings();
-		} catch (NoSuchLocaleException e) {
-			// TODO Auto-generated catch block
+			json = handle.readString();
+		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
+		model = new Json().fromJson(TenseMap.class, json);
+		model.setFileName(file);
+		return model;
 	}
 	
-	
-	private void loadStrings() throws NoSuchLocaleException {
-		FileHandle h = new FileHandle(new File(path + "/" + locale));
-		if(h == null) {
-			throw new NoSuchLocaleException();
-		}
-		strings = new Json().fromJson(HashMap.class, h.readString());
-	}
-	
-	private void writeString() {
-		HashMap<String, String> lol = new HashMap<String, String>();
-		lol.put("asdf", "asdfasdf");
-		lol.put("asdfas", "asdfasdasasf");
-		String test = new Json().toJson(lol);
-		FileHandle h = new FileHandle(new File(path + "/" + locale));
+	public void writeString(String fileName, TenseMap model) {
+		String test = new Json().toJson(model);
+		FileHandle h = new FileHandle(new File(path + "/" + fileName));
 		h.writeString(test, false);
 	}
 	
-	/**
-	 * Prints all data currently in this instance.
-	 */
-	public void printStrings() {
-		System.out.println("Printing for locale: " + locale + "\n");
-		for (String s : strings.keySet()) {
-			System.out.println(s  + " → " + strings.get(s));
-		}
-	}
 	
-	/**
-	 * Check the {@link HashMap} for a corresponding match.
-	 * @param key The key to fetch a result for.
-	 * @return The result, in a form of a {@link String}, or the key  if
-	 * no result was found.
-	 */
-	public String getString(String key) {
-		String map = strings.get(key);
-		if(map == null) return key;
-		return map;
-	}
 }

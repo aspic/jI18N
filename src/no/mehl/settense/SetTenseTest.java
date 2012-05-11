@@ -1,7 +1,5 @@
 package no.mehl.settense;
 
-import com.badlogic.gdx.utils.GdxNativesLoader;
-
 public class SetTenseTest {
 
 	/**
@@ -9,10 +7,6 @@ public class SetTenseTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		GdxNativesLoader.load();
-		Tense t = new Tense("en_GB");
-		t.printStrings();
-		
-		System.out.println(t.getString("btn_ok"));
+		new TenseDiffer("en_GB", "no_NN");
 	}
 }
