@@ -42,7 +42,6 @@ public class AndroidLoader extends FileLoader {
 	@Override
 	public void writeFile(String fileName, String data) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 }

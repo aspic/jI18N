@@ -30,7 +30,7 @@ public class TenseMap {
 	 * Prints all data currently in this instance.
 	 */
 	public void printStrings() {
-		System.out.println("Printing strings for: " + locale + " hash(" + hash + ")\n");
+		System.out.println("Printing strings for: " + locale + " hash(" + hash + ")");
 		for (String s : strings.keySet()) {
 			System.out.println(s  + " → " + strings.get(s));
 		}
