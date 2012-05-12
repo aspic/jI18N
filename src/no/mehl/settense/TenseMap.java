@@ -45,7 +45,7 @@ public class TenseMap {
 	public String getString(String key) {
 		String map = strings.get(key);
 		if(map == null) {
-			if(debug) return "_not found_ " + key;
+			if(debug) return "<" + key + ">";
 			return key;
 		}
 		return map;
