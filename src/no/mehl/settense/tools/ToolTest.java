@@ -1,12 +1,13 @@
-package no.mehl.settense;
+package no.mehl.settense.tools;
 
-public class SetTenseTest {
+
+public class ToolTest {
 
 	/**
 	 * A simple test for setting tenses.
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new TenseDiffer("en_GB", "no_NN");
+		new TenseDiff("en_GB", "no_NN");
 	}
 }

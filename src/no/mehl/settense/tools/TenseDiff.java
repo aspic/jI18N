@@ -1,13 +1,17 @@
-package no.mehl.settense;
+package no.mehl.settense.tools;
 
 
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class TenseDiffer extends Thread implements Runnable {
+import no.mehl.settense.TenseManager;
+import no.mehl.settense.TenseMap;
+import no.mehl.settense.loader.RegularLoader;
+
+public class TenseDiff extends Thread implements Runnable {
 	
 	private Scanner scanner;
-	private Tense tense;
+	private TenseManager tense;
 	
 	private TenseMap from;
 	private TenseMap to;
@@ -20,9 +24,9 @@ public class TenseDiffer extends Thread implements Runnable {
 	 * @param file1
 	 * @param file2
 	 */
-	public TenseDiffer(String file1, String file2) {
+	public TenseDiff(String file1, String file2) {
 		this.scanner = new Scanner(System.in);
-		tense = new Tense("lng");
+		tense = new TenseManager(new RegularLoader("lng"));
 		from = tense.loadStrings(file1);
 		to = tense.loadStrings(file2);
 		
@@ -62,7 +66,7 @@ public class TenseDiffer extends Thread implements Runnable {
 			 */
 			if(to.isDirty()) {
 				System.out.println("Diffed " + diffCount + " value(s). Writing to file: " + to.getFileName());
-				tense.writeString(to.getFileName(), to);
+				tense.writeStrings(to.getFileName(), to);
 			} else {
 				System.out.println("All keys existed, did not save to file.");
 			}
