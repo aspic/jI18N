@@ -16,15 +16,21 @@ public class LibgdxLoader extends FileLoader {
 	}
 
 	@Override
-	public String readFile(String file) {
+	public String readInternalFile(String file) {
 		handle = Gdx.files.internal(lngPath + "/" + file);
 		return handle.readString();
 	}
 
 	@Override
-	public void writeFile(String fileName, String data) {
-		// TODO Auto-generated method stub
-		
+	public void writeFile(String filename, String data) {
+		FileHandle handle = Gdx.files.external(lngPath + "/" + filename);
+		handle.writeString(data, false);
+	}
+
+	@Override
+	public String readExternalFile(String file) {
+		handle = Gdx.files.external(lngPath + "/" + file);
+		return handle.readString();
 	}
 
 }

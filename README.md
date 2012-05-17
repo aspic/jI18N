@@ -2,8 +2,8 @@ SetTense, oh
 ============
 
 A simple tool for generating, using and updating language maps for
-various applications. Main motive for this work was having a general
-library for loading language strings, independent of platform.
+various applications. Main motive for this work is having a general
+library for loading language strings, independent of java environment.
 
 Dependencies
 ------------

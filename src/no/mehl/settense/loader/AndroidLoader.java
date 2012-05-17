@@ -4,10 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 
 import no.mehl.settense.compability.Wrapper;
 
@@ -35,7 +34,7 @@ public class AndroidLoader extends FileLoader {
 	 * @return The JSON as a {@link String}.
 	 */
 	@Override
-	public String readFile(String file) {
+	public String readInternalFile(String file) {
 		try {
 			return parseFile(new BufferedReader(new InputStreamReader(ctx.getAssets().open(lngPath + "/" + file))));
 		} catch (FileNotFoundException e) {
@@ -46,22 +45,21 @@ public class AndroidLoader extends FileLoader {
 			return null;
 		}
 	}
+	
+	@Override
+	public String readExternalFile(String file) {
+		try {
+			return parseFile(new BufferedReader(new FileReader(getFileHandle(file))));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 
 	@Override
 	public void writeFile(String filename, String data) {
-		File file = null;
-		/**
-		 * Handling external storage differently on API <= 7
-		 */
-		if(android.os.Build.VERSION.SDK_INT <= 7) {
-			Log.d(LOG, "API <= 7");
-			file = createFile(filename);
-		} else {
-			Log.d(LOG, "API > 7");
-			file = new File(Wrapper.getExternalFilesDir(ctx), filename);
-		}
-		
+		File file = getFileHandle(filename);
 		/**
 		 * Lets create the file.
 		 * TODO: Do some proper error handling.
@@ -94,8 +92,22 @@ public class AndroidLoader extends FileLoader {
 	 * @param filename Name of the{@link File} to create.
 	 * @return The newly created {@link File}, or null of there was an error.
 	 */
-	private File createFile(String filename) {
-		File dir = new File(Environment.getExternalStorageDirectory(), "/data/" + ctx.getApplicationInfo().packageName + "/" +lngPath);
+	private File getFileHandle(String filename) {
+		/**
+		 * Handling external storage differently on API <= 7
+		 */
+		File dir;
+		/**
+		 * Fetches the parent file handle.
+		 */
+		if(android.os.Build.VERSION.SDK_INT <= 7) {
+			Log.d(LOG, "API <= 7");
+			dir = new File(Environment.getExternalStorageDirectory(), "/data/" + ctx.getApplicationInfo().packageName + "/" +lngPath);
+		} else {
+			Log.d(LOG, "API > 7");
+			dir = Wrapper.getExternalFilesDir(ctx);
+		}
+		
 		if(!dir.exists()) {
 			dir.mkdirs();
 		}
@@ -110,4 +122,7 @@ public class AndroidLoader extends FileLoader {
 			return null;
 		}
 	}
+
+
+	
 }

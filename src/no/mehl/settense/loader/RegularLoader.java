@@ -2,11 +2,18 @@ package no.mehl.settense.loader;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import no.mehl.settense.TenseMap;
+
+/**
+ * A class for loading files in a standard java environment.
+ * @author aspic
+ */
 public class RegularLoader extends FileLoader {
 
 	public RegularLoader(String lngPath) {
@@ -19,7 +26,7 @@ public class RegularLoader extends FileLoader {
 	 * @return The JSON as a {@link String} representation.
 	 */
 	@Override
-	public String readFile(String file) {
+	public String readInternalFile(String file) {
 		try {
 			return parseFile(new BufferedReader(new FileReader(lngPath + "/" + file)));
 		} catch (FileNotFoundException e) {
@@ -34,14 +41,38 @@ public class RegularLoader extends FileLoader {
 	 * @param data The data to save, preferable in a JSON format.
 	 */
 	@Override
-	public void writeFile(String fileName, String data) {
+	public void writeFile(String filename, String data) {
 		try {
-		    BufferedWriter out = new BufferedWriter(new FileWriter(lngPath + "/" + fileName));
+			File dir = new File(getExternalPath());
+			File file = new File(dir, filename);
+			if(!dir.exists()) {
+				/**
+				 * TODO: Do some more checking.
+				 */
+				dir.mkdirs();
+				file.createNewFile();
+			}
+		    BufferedWriter out = new BufferedWriter(new FileWriter(file));
 		    out.write(data);
 		    out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String readExternalFile(String file) {
+		/**
+		 * TODO: Actually do some stuff.
+		 */
+		return null;
+	}
+	
+	private String getExternalPath() {
+		/**
+		 * TODO: Not windows friendly, also bit of a hack.
+		 */
+		return System.getProperty( "user.home" ) + "/." + new TenseMap().getClass().getPackage().getName() + "/" + lngPath;
 	}
 
 }

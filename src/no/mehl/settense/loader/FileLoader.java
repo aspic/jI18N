@@ -10,16 +10,18 @@ import java.io.IOException;
 public abstract class FileLoader {
 	
 	protected String lngPath;
-	
+	/**
+	 * Constructor for this abstract class.
+	 * @param lngPath File path where language files are located.
+	 */
 	protected FileLoader(String lngPath) {
 		this.lngPath = lngPath;
 	}
 	
-	
 	/**
-	 * Reading a file from {@link BufferedReader}
+	 * Reading and parse a file from {@link BufferedReader}
 	 * @param reader The reader to read from.
-	 * @return The concatenated {@link String}.
+	 * @return The concatenated {@link String}, presumptively in JSON format.
 	 */
 	protected String parseFile(BufferedReader reader) {
 		StringBuffer buf = new StringBuffer();
@@ -34,6 +36,22 @@ public abstract class FileLoader {
 		}
 		return buf.toString();
 	}
-	public abstract String readFile(String file);
-	public abstract void writeFile(String fileName, String data);
+	/**
+	 * Generic method for reading a {@link File} from the package.
+	 * @param file The name of the file.
+	 * @return The JSON representation of the file.
+	 */
+	public abstract String readInternalFile(String file);
+	/**
+	 * Generic method for reading a {@link File} from the external storage.
+	 * @param file The name of the file.
+	 * @return The JSON representation of the file.
+	 */
+	public abstract String readExternalFile(String file);
+	/**
+	 * Generic method for writing a {@link File} to the external storage.
+	 * @param filename Filename of the to be written file.
+	 * @param data Data to write, in a {@link String} format.
+	 */
+	public abstract void writeFile(String filename, String data);
 }

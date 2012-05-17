@@ -27,8 +27,8 @@ public class TenseDiff extends Thread implements Runnable {
 	public TenseDiff(String file1, String file2) {
 		this.scanner = new Scanner(System.in);
 		tense = new TenseManager(new RegularLoader("lng"));
-		from = tense.loadStrings(file1);
-		to = tense.loadStrings(file2);
+		from = tense.loadInternalStrings(file1);
+		to = tense.loadInternalStrings(file2);
 		
 		it = from.getKeyIterator();
 		
