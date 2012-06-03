@@ -3,6 +3,8 @@ package no.mehl.settense.loader;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import no.mehl.settense.TenseMap;
+
 /**
  * A generic file loading class.
  * @author aspic
@@ -53,5 +55,11 @@ public abstract class FileLoader {
 	 * @param filename Filename of the to be written file.
 	 * @param data Data to write, in a {@link String} format.
 	 */
-	public abstract void writeFile(String filename, String data);
+	public abstract void writeFile(String filename, TenseMap model);
+	/**
+	 * Generic method for creating a {@link TenseMap} model given a raw JSON {@link String}
+	 * @param raw The JSON string to be parsed, using the preferred parser.
+	 * @return The {@link TenseMap}.
+	 */
+	public abstract TenseMap fromJson(String raw);
 }

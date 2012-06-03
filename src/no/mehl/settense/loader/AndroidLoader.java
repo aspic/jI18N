@@ -8,6 +8,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.google.gson.Gson;
+
+import no.mehl.settense.TenseMap;
 import no.mehl.settense.compability.Wrapper;
 
 import android.content.Context;
@@ -21,10 +24,12 @@ import android.util.Log;
 public class AndroidLoader extends FileLoader {
 	private Context ctx;
 	private static final String LOG = "FileLoader";
+	private Gson json;
 	
 	public AndroidLoader(String lngPath, Context ctx) {
 		super(lngPath);
 		this.ctx = ctx;
+		json = new Gson();
 	}
 
 	
@@ -58,14 +63,16 @@ public class AndroidLoader extends FileLoader {
 
 
 	@Override
-	public void writeFile(String filename, String data) {
+	public void writeFile(String filename, TenseMap model) {
+		String jsonString = json.toJson(model);
+		
 		File file = getFileHandle(filename);
 		/**
 		 * Lets create the file.
 		 * TODO: Do some proper error handling.
 		 */
 		try {
-			write(file, data);
+			write(file, jsonString);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -121,6 +128,12 @@ public class AndroidLoader extends FileLoader {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+
+	@Override
+	public TenseMap fromJson(String raw) {
+		return json.fromJson(raw, TenseMap.class);
 	}
 
 

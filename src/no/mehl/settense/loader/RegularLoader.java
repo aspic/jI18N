@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import com.google.gson.Gson;
+
 import no.mehl.settense.TenseMap;
 
 /**
@@ -15,9 +17,12 @@ import no.mehl.settense.TenseMap;
  * @author aspic
  */
 public class RegularLoader extends FileLoader {
+	
+	private Gson json;
 
 	public RegularLoader(String lngPath) {
 		super(lngPath);
+		json = new Gson();
 	}
 
 	/**
@@ -41,7 +46,8 @@ public class RegularLoader extends FileLoader {
 	 * @param data The data to save, preferable in a JSON format.
 	 */
 	@Override
-	public void writeFile(String filename, String data) {
+	public void writeFile(String filename, TenseMap model) {
+		String jsonString = json.toJson(model);
 		try {
 			File dir = new File(getExternalPath());
 			File file = new File(dir, filename);
@@ -53,7 +59,7 @@ public class RegularLoader extends FileLoader {
 				file.createNewFile();
 			}
 		    BufferedWriter out = new BufferedWriter(new FileWriter(file));
-		    out.write(data);
+		    out.write(jsonString);
 		    out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -70,9 +76,14 @@ public class RegularLoader extends FileLoader {
 	
 	private String getExternalPath() {
 		/**
-		 * TODO: Not windows friendly, also bit of a hack.
+		 * TODO: Not windows friendly, also _bit_ of a hack.
 		 */
 		return System.getProperty( "user.home" ) + "/." + new TenseMap().getClass().getPackage().getName() + "/" + lngPath;
+	}
+
+	@Override
+	public TenseMap fromJson(String raw) {
+		return json.fromJson(raw, TenseMap.class);
 	}
 
 }

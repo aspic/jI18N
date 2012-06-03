@@ -15,7 +15,6 @@ import com.google.gson.Gson;
 public class TenseManager {
 	
 	private FileLoader loader;
-	private Gson gson;
 	
 	/**
 	 * A {@link TenseManager} for loading/writing {@link TenseModel}.
@@ -24,7 +23,6 @@ public class TenseManager {
 	 */
 	public TenseManager(FileLoader loader) {
 		this.loader = loader;
-		gson = new Gson();
 	}
 	/**
 	 * Save an updated {@link TenseMap}.
@@ -32,8 +30,7 @@ public class TenseManager {
 	 * @param model The model to serialize.
 	 */
 	public void writeStrings(String fileName, TenseMap model) {
-		String data = gson.toJson(model);
-		this.loader.writeFile(fileName, data);
+		this.loader.writeFile(fileName, model);
 	}
 	/**
 	 * Load strings from the specified file, within the package.
@@ -68,7 +65,6 @@ public class TenseManager {
 	 */
 	private TenseMap parseToMap(String raw) {
 		if(raw == null) return null;
-		TenseMap model = gson.fromJson(raw, TenseMap.class);
-		return model;
+		return loader.fromJson(raw);
 	}
 }
