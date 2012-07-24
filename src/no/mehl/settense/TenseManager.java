@@ -1,11 +1,11 @@
 package no.mehl.settense;
 
+import java.util.HashMap;
+
 import no.mehl.settense.loader.AndroidLoader;
 import no.mehl.settense.loader.FileLoader;
 import no.mehl.settense.loader.LibgdxLoader;
 import no.mehl.settense.loader.RegularLoader;
-
-import com.google.gson.Gson;
 
 /**
  * A class for managing {@link Strings} for language purposes in an application.
@@ -15,6 +15,8 @@ import com.google.gson.Gson;
 public class TenseManager {
 	
 	private FileLoader loader;
+	private HashMap<String, TenseMap> mapCache;
+	private TenseMap activeMap;
 	
 	/**
 	 * A {@link TenseManager} for loading/writing {@link TenseModel}.
@@ -23,6 +25,7 @@ public class TenseManager {
 	 */
 	public TenseManager(FileLoader loader) {
 		this.loader = loader;
+		this.mapCache = new HashMap<String, TenseMap>();
 	}
 	/**
 	 * Save an updated {@link TenseMap}.
@@ -33,7 +36,7 @@ public class TenseManager {
 		this.loader.writeFile(fileName, model);
 	}
 	/**
-	 * Load strings from the specified file, within the package.
+	 * Load strings from the specified file, from the package. Caches if necessary.
 	 * <ul>
 	 * 	<li>android: assets/path/file</li>
 	 *  <li>libgdx: path/file</li>
@@ -43,10 +46,16 @@ public class TenseManager {
 	 * @return A {@link TenseMap} containing all strings from a successful read file, null otherwise.
 	 */
 	public TenseMap loadInternalStrings(String file) {
-		return parseToMap(this.loader.readInternalFile(file));
+		TenseMap cached = mapCache.get(file);
+		if(cached == null) {
+			cached = parseToMap(this.loader.readInternalFile(file));
+			mapCache.put(file, cached);
+		}
+		activeMap = cached;
+		return cached;
 	}
 	/**
-	 * Load strings from the external storage
+	 * Load strings from the external storage, caches if necessary.
 	 * <ul>
 	 * 	<li>android: external/data/package-name/path/file</li>
 	 *  <li>libgdx: ~/path/file</li>
@@ -56,7 +65,13 @@ public class TenseManager {
 	 * @return A generated {@link TenseMap containing all strings}.
 	 */
 	public TenseMap loadExternalStrings(String file) {
-		return parseToMap(this.loader.readExternalFile(file));
+		TenseMap cached = mapCache.get(file);
+		if(cached == null) {
+			cached = parseToMap(this.loader.readExternalFile(file));
+			mapCache.put(file, cached);
+		}
+		activeMap = cached;
+		return cached;
 	}
 	/**
 	 * Simple method for actually doing the parsing of the file.
@@ -66,5 +81,17 @@ public class TenseManager {
 	private TenseMap parseToMap(String raw) {
 		if(raw == null) return null;
 		return loader.fromJson(raw);
+	}
+	
+	public void setActiveMap(String key) {
+		activeMap = mapCache.get(key);
+	}
+	
+	public void setActiveMap(TenseMap map) {
+		activeMap = map;
+	}
+	
+	public TenseMap getMap() {
+		return activeMap;
 	}
 }
