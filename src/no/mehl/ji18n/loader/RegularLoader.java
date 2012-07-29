@@ -1,4 +1,4 @@
-package no.mehl.settense.loader;
+package no.mehl.ji18n.loader;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import com.google.gson.Gson;
 
-import no.mehl.settense.TenseMap;
+import no.mehl.ji18n.Map;
 
 /**
  * A class for loading files in a standard java environment.
@@ -46,7 +46,7 @@ public class RegularLoader extends FileLoader {
 	 * @param data The data to save, preferable in a JSON format.
 	 */
 	@Override
-	public void writeFile(String filename, TenseMap model) {
+	public void writeFile(String filename, Map model) {
 		String jsonString = json.toJson(model);
 		try {
 			File dir = new File(getExternalPath());
@@ -78,12 +78,12 @@ public class RegularLoader extends FileLoader {
 		/**
 		 * TODO: Not windows friendly, also _bit_ of a hack.
 		 */
-		return System.getProperty( "user.home" ) + "/." + new TenseMap().getClass().getPackage().getName() + "/" + lngPath;
+		return System.getProperty( "user.home" ) + "/." + new Map().getClass().getPackage().getName() + "/" + lngPath;
 	}
 
 	@Override
-	public TenseMap fromJson(String raw) {
-		return json.fromJson(raw, TenseMap.class);
+	public Map fromJson(String raw) {
+		return json.fromJson(raw, Map.class);
 	}
 
 }

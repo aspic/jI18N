@@ -1,6 +1,6 @@
-package no.mehl.settense.loader;
+package no.mehl.ji18n.loader;
 
-import no.mehl.settense.TenseMap;
+import no.mehl.ji18n.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -27,8 +27,8 @@ public class LibgdxLoader extends FileLoader {
 	}
 
 	@Override
-	public void writeFile(String filename, TenseMap model) {
-		String jsonString = json.toJson(model, TenseMap.class);
+	public void writeFile(String filename, Map model) {
+		String jsonString = json.toJson(model, Map.class);
 		FileHandle handle = Gdx.files.external(lngPath + "/" + filename);
 		handle.writeString(jsonString, false);
 	}
@@ -40,8 +40,8 @@ public class LibgdxLoader extends FileLoader {
 	}
 
 	@Override
-	public TenseMap fromJson(String raw) {
-		return json.fromJson(TenseMap.class, raw);
+	public Map fromJson(String raw) {
+		return json.fromJson(Map.class, raw);
 	}
 
 }

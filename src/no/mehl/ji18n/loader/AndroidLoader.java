@@ -1,4 +1,4 @@
-package no.mehl.settense.loader;
+package no.mehl.ji18n.loader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,8 +10,8 @@ import java.io.InputStreamReader;
 
 import com.google.gson.Gson;
 
-import no.mehl.settense.TenseMap;
-import no.mehl.settense.compability.Wrapper;
+import no.mehl.ji18n.Map;
+import no.mehl.ji18n.compability.Wrapper;
 
 import android.content.Context;
 import android.os.Environment;
@@ -63,7 +63,7 @@ public class AndroidLoader extends FileLoader {
 
 
 	@Override
-	public void writeFile(String filename, TenseMap model) {
+	public void writeFile(String filename, Map model) {
 		String jsonString = json.toJson(model);
 		
 		File file = getFileHandle(filename);
@@ -132,8 +132,8 @@ public class AndroidLoader extends FileLoader {
 
 
 	@Override
-	public TenseMap fromJson(String raw) {
-		return json.fromJson(raw, TenseMap.class);
+	public Map fromJson(String raw) {
+		return json.fromJson(raw, Map.class);
 	}
 
 

@@ -1,38 +1,38 @@
-package no.mehl.settense;
+package no.mehl.ji18n;
 
 import java.util.HashMap;
 
-import no.mehl.settense.loader.AndroidLoader;
-import no.mehl.settense.loader.FileLoader;
-import no.mehl.settense.loader.LibgdxLoader;
-import no.mehl.settense.loader.RegularLoader;
+import no.mehl.ji18n.loader.AndroidLoader;
+import no.mehl.ji18n.loader.FileLoader;
+import no.mehl.ji18n.loader.LibgdxLoader;
+import no.mehl.ji18n.loader.RegularLoader;
 
 /**
  * A class for managing {@link Strings} for language purposes in an application.
  * Strings could be diffed from a server, and/or stored locally.
  * @author aspic
  */
-public class TenseManager {
+public class Manager {
 	
 	private FileLoader loader;
-	private HashMap<String, TenseMap> mapCache;
-	private TenseMap activeMap;
+	private HashMap<String, Map> mapCache;
+	private Map activeMap;
 	
 	/**
-	 * A {@link TenseManager} for loading/writing {@link TenseModel}.
+	 * A {@link Manager} for loading/writing {@link TenseModel}.
 	 * @param loader Which {@link FileLoader} to use. For pure Android-application use {@link AndroidLoader}, for
 	 * Libgdx-applications use {@link LibgdxLoader} and for generic java-applications use {@link RegularLoader}.
 	 */
-	public TenseManager(FileLoader loader) {
+	public Manager(FileLoader loader) {
 		this.loader = loader;
-		this.mapCache = new HashMap<String, TenseMap>();
+		this.mapCache = new HashMap<String, Map>();
 	}
 	/**
-	 * Save an updated {@link TenseMap}.
+	 * Save an updated {@link Map}.
 	 * @param fileName File name for the map.
 	 * @param model The model to serialize.
 	 */
-	public void writeStrings(String fileName, TenseMap model) {
+	public void writeStrings(String fileName, Map model) {
 		this.loader.writeFile(fileName, model);
 	}
 	/**
@@ -43,10 +43,10 @@ public class TenseManager {
 	 *  <li>regular: path/file</li>
 	 * </ul>
 	 * @param file The file to load from.
-	 * @return A {@link TenseMap} containing all strings from a successful read file, null otherwise.
+	 * @return A {@link Map} containing all strings from a successful read file, null otherwise.
 	 */
-	public TenseMap loadInternalStrings(String file) {
-		TenseMap cached = mapCache.get(file);
+	public Map loadInternalStrings(String file) {
+		Map cached = mapCache.get(file);
 		if(cached == null) {
 			cached = parseToMap(this.loader.readInternalFile(file));
 			mapCache.put(file, cached);
@@ -62,10 +62,10 @@ public class TenseManager {
 	 *  <li>regular: ~/path/file</li>
 	 * </ul>
 	 * @param file Name of the {@link File} to load.
-	 * @return A generated {@link TenseMap containing all strings}.
+	 * @return A generated {@link Map containing all strings}.
 	 */
-	public TenseMap loadExternalStrings(String file) {
-		TenseMap cached = mapCache.get(file);
+	public Map loadExternalStrings(String file) {
+		Map cached = mapCache.get(file);
 		if(cached == null) {
 			cached = parseToMap(this.loader.readExternalFile(file));
 			mapCache.put(file, cached);
@@ -76,9 +76,9 @@ public class TenseManager {
 	/**
 	 * Simple method for actually doing the parsing of the file.
 	 * @param raw The {@link String} to parse into JSON.
-	 * @return {@link TenseMap} representing the JSON.
+	 * @return {@link Map} representing the JSON.
 	 */
-	private TenseMap parseToMap(String raw) {
+	private Map parseToMap(String raw) {
 		if(raw == null) return null;
 		return loader.fromJson(raw);
 	}
@@ -87,11 +87,11 @@ public class TenseManager {
 		activeMap = mapCache.get(key);
 	}
 	
-	public void setActiveMap(TenseMap map) {
+	public void setActiveMap(Map map) {
 		activeMap = map;
 	}
 	
-	public TenseMap getMap() {
+	public Map getMap() {
 		return activeMap;
 	}
 }

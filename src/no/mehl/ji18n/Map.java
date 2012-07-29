@@ -1,9 +1,9 @@
-package no.mehl.settense;
+package no.mehl.ji18n;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class TenseMap {
+public class Map {
 	private String hash;
 	private String locale;
 	private HashMap<String, String> strings;
@@ -11,16 +11,16 @@ public class TenseMap {
 	private transient boolean dirty;
 	private transient boolean debug;
 	
-	public TenseMap() {
+	public Map() {
 		this(null);
 	}
 	
-	public TenseMap(String fileName) {
+	public Map(String fileName) {
 		this.fileName = fileName;
 		strings = new HashMap<String, String>();
 	}
 	
-	public TenseMap(String hash, HashMap<String, String> strings) {
+	public Map(String hash, HashMap<String, String> strings) {
 		super();
 		this.hash = hash;
 		this.strings = strings;

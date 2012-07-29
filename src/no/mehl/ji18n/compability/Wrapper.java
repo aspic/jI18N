@@ -1,4 +1,4 @@
-package no.mehl.settense.compability;
+package no.mehl.ji18n.compability;
 
 import java.io.File;
 

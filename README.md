@@ -1,5 +1,5 @@
-SetTense, oh
-============
+Java internationalization (jI18N)
+=================================
 
 A simple tool for generating, using and updating language maps for
 various applications. Main motive for this work is having a general
@@ -8,7 +8,7 @@ library for loading language strings, independent of java environment.
 Dependencies
 ------------
 
-SetTense currently depends on [Google
+The library currently depend on [Google
 JSON](http://code.google.com/p/google-gson/), which needs to be in your
 library path when using this tool.  This dependency will (most likely)
 be removed in a future update.

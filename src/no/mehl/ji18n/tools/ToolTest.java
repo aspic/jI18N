@@ -1,4 +1,4 @@
-package no.mehl.settense.tools;
+package no.mehl.ji18n.tools;
 
 
 public class ToolTest {

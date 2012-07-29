@@ -1,20 +1,20 @@
-package no.mehl.settense.tools;
+package no.mehl.ji18n.tools;
 
 
 import java.util.Iterator;
 import java.util.Scanner;
 
-import no.mehl.settense.TenseManager;
-import no.mehl.settense.TenseMap;
-import no.mehl.settense.loader.RegularLoader;
+import no.mehl.ji18n.Manager;
+import no.mehl.ji18n.Map;
+import no.mehl.ji18n.loader.RegularLoader;
 
 public class TenseDiff extends Thread implements Runnable {
 	
 	private Scanner scanner;
-	private TenseManager tense;
+	private Manager tense;
 	
-	private TenseMap from;
-	private TenseMap to;
+	private Map from;
+	private Map to;
 	private Iterator<String> it;
 	
 	private int diffCount;
@@ -26,7 +26,7 @@ public class TenseDiff extends Thread implements Runnable {
 	 */
 	public TenseDiff(String file1, String file2) {
 		this.scanner = new Scanner(System.in);
-		tense = new TenseManager(new RegularLoader("lng"));
+		tense = new Manager(new RegularLoader("lng"));
 		from = tense.loadInternalStrings(file1);
 		to = tense.loadInternalStrings(file2);
 		
@@ -34,7 +34,7 @@ public class TenseDiff extends Thread implements Runnable {
 		
 		if(from == null) return;
 		if(to == null) {
-			to = new TenseMap(file2);
+			to = new Map(file2);
 			System.out.println("File did not exist. Creating new one (press <return> when finished).\nLocale: ");
 			to.setLocale(scanner.nextLine());
 		}
