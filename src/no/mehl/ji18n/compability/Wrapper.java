@@ -13,6 +13,7 @@ public class Wrapper {
 	 * @return A new {@link File} handle.
 	 */
 	public static File getExternalFilesDir(Context ctx) {
-		return ctx.getExternalFilesDir(null);
+//		return ctx.getExternalFilesDir(null);
+		return null;
 	}
 }
