@@ -1,6 +1,7 @@
 package no.mehl.ji18n.loader;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 
 import no.mehl.ji18n.Map;
@@ -11,13 +12,13 @@ import no.mehl.ji18n.Map;
  */
 public abstract class FileLoader {
 	
-	protected String lngPath;
+	protected String folder;
 	/**
 	 * Constructor for this abstract class.
-	 * @param lngPath File path where language files are located.
+	 * @param folder File path where language files are located.
 	 */
-	protected FileLoader(String lngPath) {
-		this.lngPath = lngPath;
+	protected FileLoader(String languageFolder) {
+		this.folder = languageFolder;
 	}
 	
 	/**

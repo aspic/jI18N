@@ -20,8 +20,8 @@ public class RegularLoader extends FileLoader {
 	
 	private Gson json;
 
-	public RegularLoader(String lngPath) {
-		super(lngPath);
+	public RegularLoader(String languageFolder) {
+		super(languageFolder);
 		json = new Gson();
 	}
 
@@ -33,7 +33,7 @@ public class RegularLoader extends FileLoader {
 	@Override
 	public String readInternalFile(String file) {
 		try {
-			return parseFile(new BufferedReader(new FileReader(lngPath + "/" + file)));
+			return parseFile(new BufferedReader(new FileReader(folder + "/" + file)));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return null;
@@ -78,12 +78,11 @@ public class RegularLoader extends FileLoader {
 		/**
 		 * TODO: Not windows friendly, also _bit_ of a hack.
 		 */
-		return System.getProperty( "user.home" ) + "/." + new Map().getClass().getPackage().getName() + "/" + lngPath;
+		return System.getProperty( "user.home" ) + "/." + new Map().getClass().getPackage().getName() + "/" + folder;
 	}
 
 	@Override
 	public Map fromJson(String raw) {
 		return json.fromJson(raw, Map.class);
 	}
-
 }

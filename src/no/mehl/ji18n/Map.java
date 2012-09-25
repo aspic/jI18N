@@ -6,6 +6,7 @@ import java.util.Iterator;
 public class Map {
 	private String hash;
 	private String locale;
+	private String name;
 	private HashMap<String, String> strings;
 	private transient String fileName;
 	private transient boolean dirty;
@@ -30,7 +31,7 @@ public class Map {
 	 * Prints all data currently in this instance.
 	 */
 	public void printStrings() {
-		System.out.println("Printing strings for: " + locale + " hash(" + hash + ")");
+		System.out.println("Printing strings for: " + locale + " name: " + name + " hash(" + hash + ")");
 		for (String s : strings.keySet()) {
 			System.out.println(s  + " → " + strings.get(s));
 		}
@@ -60,13 +61,26 @@ public class Map {
 		strings.put(key, value);
 		dirty = true;
 	}
-	
+	/**
+	 * Returns an {@link Iterator} over the key set.
+	 * @return The {@link Iterator}.
+	 */
 	public Iterator<String> getKeyIterator() {
 		return strings.keySet().iterator();
 	}
 	
+	/**
+	 * Returns the locale for this {@link Map}.
+	 * @return The locale.
+	 */
 	public String getLocale() {
 		return locale;
+	}
+	/** Returns the name for this {@link Map}
+	 * @return The name.
+	 */
+	public String getName() {
+		return name;
 	}
 	
 	public void setFileName(String fileName) {
@@ -77,6 +91,10 @@ public class Map {
 		return this.fileName;
 	}
 	
+	/**
+	 * A check whether we have altered the {@link Map} or not.
+	 * @return true if this {@link Map} has been altered and not written to disk.
+	 */
 	public boolean isDirty() {
 		return this.dirty;
 	}

@@ -1,6 +1,7 @@
 package no.mehl.ji18n;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 import no.mehl.ji18n.loader.AndroidLoader;
 import no.mehl.ji18n.loader.FileLoader;
@@ -24,9 +25,30 @@ public class Manager {
 	 * Libgdx-applications use {@link LibgdxLoader} and for generic java-applications use {@link RegularLoader}.
 	 */
 	public Manager(FileLoader loader) {
+		this(loader, null, null);
+	}
+	
+	/**
+	 * This constructor actually load files using the specified {@link FileLoader}.
+	 * @param loader The {@link FileLoader} to use.
+	 * @param filenames Provide a list with file names to load.
+	 * @param prefferedLocale A locale we want to set right away.
+	 */
+	public Manager(FileLoader loader, String[] filenames, String prefferedLocale) {
 		this.loader = loader;
 		this.mapCache = new HashMap<String, Map>();
+		
+		if(filenames != null) {
+			for (int i = 0; i < filenames.length; i++) {
+				loadInternalStrings(filenames[i]);
+			}
+			if(prefferedLocale != null) {
+				setActiveMap(prefferedLocale);
+			}
+		}
+		
 	}
+	
 	/**
 	 * Save an updated {@link Map}.
 	 * @param fileName File name for the map.
@@ -49,7 +71,7 @@ public class Manager {
 		Map cached = mapCache.get(file);
 		if(cached == null) {
 			cached = parseToMap(this.loader.readInternalFile(file));
-			mapCache.put(file, cached);
+			mapCache.put(cached.getLocale(), cached);
 		}
 		activeMap = cached;
 		return cached;
@@ -64,11 +86,11 @@ public class Manager {
 	 * @param file Name of the {@link File} to load.
 	 * @return A generated {@link Map containing all strings}.
 	 */
-	public Map loadExternalStrings(String file) {
-		Map cached = mapCache.get(file);
+	public Map loadExternalStrings(String locale) {
+		Map cached = mapCache.get(locale);
 		if(cached == null) {
-			cached = parseToMap(this.loader.readExternalFile(file));
-			mapCache.put(file, cached);
+			cached = parseToMap(this.loader.readExternalFile(locale));
+			mapCache.put(locale, cached);
 		}
 		activeMap = cached;
 		return cached;
@@ -83,8 +105,16 @@ public class Manager {
 		return loader.fromJson(raw);
 	}
 	
-	public void setActiveMap(String key) {
-		activeMap = mapCache.get(key);
+	/**
+	 * Sets the active {@link Map} based on the locale, given that the {@link Map} exists.
+	 * @param locale The locale (specified in the language files).
+	 */
+	public Map setActiveMap(String locale) {
+		if(mapCache.get(locale) != null) {
+			activeMap = mapCache.get(locale);
+			return activeMap;
+		}
+		return null;
 	}
 	
 	public void setActiveMap(Map map) {
@@ -94,4 +124,11 @@ public class Manager {
 	public Map getMap() {
 		return activeMap;
 	}
+	
+	public String[] getLoadedMaps() {
+		String[] locales = new String[mapCache.size()];
+		mapCache.keySet().toArray(locales);
+		return locales;
+	}
+	
 }

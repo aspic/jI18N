@@ -26,8 +26,8 @@ public class AndroidLoader extends FileLoader {
 	private static final String LOG = "FileLoader";
 	private Gson json;
 	
-	public AndroidLoader(String lngPath, Context ctx) {
-		super(lngPath);
+	public AndroidLoader(String languageFolder, Context ctx) {
+		super(languageFolder);
 		this.ctx = ctx;
 		json = new Gson();
 	}
@@ -41,7 +41,7 @@ public class AndroidLoader extends FileLoader {
 	@Override
 	public String readInternalFile(String file) {
 		try {
-			return parseFile(new BufferedReader(new InputStreamReader(ctx.getAssets().open(lngPath + "/" + file))));
+			return parseFile(new BufferedReader(new InputStreamReader(ctx.getAssets().open(folder + "/" + file))));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return null;
@@ -109,7 +109,7 @@ public class AndroidLoader extends FileLoader {
 		 */
 		if(android.os.Build.VERSION.SDK_INT <= 7) {
 			Log.d(LOG, "API <= 7");
-			dir = new File(Environment.getExternalStorageDirectory(), "/data/" + ctx.getApplicationInfo().packageName + "/" +lngPath);
+			dir = new File(Environment.getExternalStorageDirectory(), "/data/" + ctx.getApplicationInfo().packageName + "/" +folder);
 		} else {
 			Log.d(LOG, "API > 7");
 			dir = Wrapper.getExternalFilesDir(ctx);
@@ -130,12 +130,8 @@ public class AndroidLoader extends FileLoader {
 		}
 	}
 
-
 	@Override
 	public Map fromJson(String raw) {
 		return json.fromJson(raw, Map.class);
 	}
-
-
-	
 }
